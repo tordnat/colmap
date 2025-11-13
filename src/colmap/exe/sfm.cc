@@ -33,6 +33,7 @@
 #include "colmap/controllers/bundle_adjustment.h"
 #include "colmap/controllers/hierarchical_pipeline.h"
 #include "colmap/controllers/option_manager.h"
+#include "colmap/estimators/generated/solver_params.h"
 #include "colmap/estimators/similarity_transform.h"
 #include "colmap/exe/gui.h"
 #include "colmap/scene/database_sqlite.h"
@@ -627,8 +628,9 @@ int RunRigBundleAdjuster(int argc, char** argv) {
   }
   ApplyRigConfig(ReadRigConfig(rig_config_path), *database, &reconstruction);
 
-  std::unique_ptr<BundleAdjuster> bundle_adjuster = CreateDefaultBundleAdjuster(
-      *options.bundle_adjustment, std::move(config), reconstruction);
+  caspar::SolverParams params;
+  std::unique_ptr<BundleAdjuster> bundle_adjuster = CreateCasparBundleAdjuster(
+      *options.bundle_adjustment, std::move(config), reconstruction, params);
   if (bundle_adjuster->Solve().termination_type == ceres::FAILURE) {
     LOG(ERROR) << "Failed to solve rig bundle adjustment";
     return EXIT_FAILURE;
