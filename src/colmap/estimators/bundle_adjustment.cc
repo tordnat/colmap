@@ -2153,7 +2153,7 @@ std::unique_ptr<BundleAdjuster> CreateCasparBundleAdjuster(
     BundleAdjustmentOptions options,
     BundleAdjustmentConfig config,
     Reconstruction& reconstruction,
-    caspar::SolverParams params) {
+    caspar::SolverParams params = caspar::SolverParams()) {
   std::cout << "@@@ USING CASPAR BUNDLE ADJUSTER @@@";
 
   return std::make_unique<CasparBundleAdjuster>(
